@@ -1,18 +1,21 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import resume from "../assets/Prash_29.pdf"
+import { HiMenu, HiX } from "react-icons/hi";
+import resume from "../assets/Prash_29.pdf";
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const navLinks = [
     "Home",
     "About",
     "Skills",
     "Projects",
-    // "Experience",
     "Contact",
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 flex justify-center pt-6">
+    <header className="fixed top-0 left-0 w-full z-50 flex justify-center pt-4 md:pt-6">
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -21,9 +24,11 @@ function Navbar() {
           ease: "easeOut",
         }}
         className="
-          w-[90%]
+          relative
+          w-[95%]
           max-w-7xl
-          px-8
+          px-5
+          md:px-8
           py-4
           flex
           items-center
@@ -41,7 +46,8 @@ function Navbar() {
         <a
           href="#home"
           className="
-            text-2xl
+            text-xl
+            md:text-2xl
             font-bold
             text-white
             tracking-wider
@@ -50,7 +56,7 @@ function Navbar() {
           PM
         </a>
 
-        {/* Nav Links */}
+        {/* Desktop Navigation */}
 
         <ul className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
@@ -80,7 +86,7 @@ function Navbar() {
           ))}
         </ul>
 
-        {/* Resume Button */}
+        {/* Desktop Resume Button */}
 
         <a
           href={resume}
@@ -106,20 +112,84 @@ function Navbar() {
           Resume
         </a>
 
-        {/* Mobile Button */}
+        {/* Mobile Menu Button */}
 
         <button
-          className="
-            md:hidden
-            flex
-            flex-col
-            gap-1
-          "
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-white"
         >
-          <span className="w-6 h-[2px] bg-white"></span>
-          <span className="w-6 h-[2px] bg-white"></span>
-          <span className="w-6 h-[2px] bg-white"></span>
+          {isOpen ? (
+            <HiX size={30} />
+          ) : (
+            <HiMenu size={30} />
+          )}
         </button>
+
+        {/* Mobile Menu */}
+
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="
+              absolute
+              top-20
+              left-0
+              w-full
+
+              rounded-2xl
+
+              border
+              border-white/10
+
+              bg-[#050816]/95
+              backdrop-blur-xl
+
+              p-6
+
+              md:hidden
+            "
+          >
+            <ul className="flex flex-col items-center gap-6">
+
+              {navLinks.map((link) => (
+                <li key={link}>
+                  <a
+                    href={`#${link.toLowerCase()}`}
+                    onClick={() => setIsOpen(false)}
+                    className="
+                      text-lg
+                      text-gray-300
+                      hover:text-purple-400
+                    "
+                  >
+                    {link}
+                  </a>
+                </li>
+              ))}
+
+              <a
+                href={resume}
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  rounded-xl
+                  bg-purple-600
+                  px-6
+                  py-3
+                  text-white
+                  font-medium
+                  hover:bg-purple-500
+                  transition
+                "
+              >
+                Resume
+              </a>
+
+            </ul>
+          </motion.div>
+        )}
+
       </motion.nav>
     </header>
   );
